@@ -1,5 +1,7 @@
 require("dotenv").config();
 
+var keys = require("./keys.js");
+
 var apikeys = require("./keys.js")
 
 var Spotify = require('node-spotify-api');
@@ -8,8 +10,7 @@ var request = require('request'); //OMDB
 
 
 //var spotify = new Spotify(keys.spotify);
-//var client = new Twitter(keys.twitter);
-
+var client = new Twitter(keys.twitter);
 
 
 switch(process.argv[2]){
@@ -21,7 +22,7 @@ switch(process.argv[2]){
 		//renderSpotify();
 		break;
 	case "my-tweets":
-		//renderTweets();
+		renderTweets();
 		break;
 	case "do-what-it-says":
 		//renderWhatISay();
@@ -29,14 +30,13 @@ switch(process.argv[2]){
 }
 
 
-
-
 function renderMovie(){
 	
 	var movieName = "";
+	//var nobody = process.argv[3];
 
 	for(var i = 3; i < process.argv.length; i++){
-		// if(process.argv[3] == false){
+		// if(typeof nobody === 'undefined'){
 
 		// 	var movieName = "Mr. Nobody";
 		if(i > 3 && i < process.argv.length){
@@ -53,7 +53,6 @@ function renderMovie(){
 	request(queryUrl, function(error, response, body){
 		if (!error && response.statusCode === 200) {
 			//console.log(JSON.parse(body));
-
 			console.log("Title: " + JSON.parse(body).Title);
 			console.log("Year: " + JSON.parse(body).Year);
 			console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
@@ -64,15 +63,21 @@ function renderMovie(){
 			console.log("Actors: " + JSON.parse(body).Actors);
 		}
 	});
-	
-	
 };
 
-// var params = {screen_name: 'nodejs'};
-// client.get('statuses/user_timeline', params, function(error, tweets, response) {
-//   if (!error) {
-//     console.log(tweets);
-//   }
 
-  
-// });
+function renderTweets(){
+ 	var params = {screen_name: 'nodejs'};
+	client.get('search/tweets', params, function(error, tweets, response) {
+	   if (!error) {
+	     console.log(tweets);
+	     console.log("--------------------------------------------------------------------")
+	   };
+	 });
+};
+
+
+
+
+
+
