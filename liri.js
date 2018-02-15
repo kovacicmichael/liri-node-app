@@ -34,17 +34,19 @@ function renderMovie(){
 	
 	var movieName = "";
 	//var nobody = process.argv[3];
+	if(typeof nobody === "undefined"){
+		var movieName = "Mr. Nobody";
+	}else{
 
-	for(var i = 3; i < process.argv.length; i++){
-		//if(typeof nobody === 'undefined'){
+		for(var i = 3; i < process.argv.length; i++){
 
-		//var movieName = "Mr. Nobody";
-		if(i > 3 && i < process.argv.length){
+			if(i > 3 && i < process.argv.length){
 
-			var movieName = movieName + "+" + process.argv[i];
-		}else{
-			var movieName = process.argv[3];
-		}
+				var movieName = movieName + "+" + process.argv[i];
+			}else{
+				var movieName = process.argv[3];
+			}
+		};
 	};
 
 	// Then run a request to the OMDB API with the movie specified
@@ -68,60 +70,56 @@ function renderMovie(){
 
 
 function renderTweets(){
- 	var params = {screen_name: 'nodejs'};
-	client.get('search/tweets', params, function(error, tweets, response) {
+ 	var params = {screen_name: 'Kovacic55'};
+	client.get('statuses/user_timeline', params, function(error, tweets, response) {
 	   if (!error) {
-	     console.log(tweets);
-	     console.log("--------------------------------------------------------------------")
+	     //console.log(tweets);
+	     //console.log(response);
+		for(var i = 0; i < tweets.length; i++){
+		     console.log(tweets[i].text)
+		 };
+		 console.log("--------------------------------------------------------------------")
 	   };
 	 });
 };
 
 function renderSpotify(){
 	var song = "";
+	var search = process.argv[3];
 
-	for(var i = 3; i < process.argv.length; i++){
-		
-		if(i > 3 && i < process.argv.length){
+	if(typeof search === "undefined"){
+		var song = "The Sign, Ace of Base"
+	}else{
 
-			var song = song + "+" + process.argv[i];
-		}else{
-			var song = process.argv[3];
-		}
+		for(var i = 3; i < process.argv.length; i++){
+			
+			if(i > 3 && i < process.argv.length){
+
+				var song = song + "+" + process.argv[i];
+			}else{
+				var song = process.argv[3];
+			}
+		};
 	};
 
 
-	spotify.search({ type: 'track', query: song }, function(err, data) {
+	spotify.search({ type: 'track', query: song, limit: 10}, function(err, data) {
 	 	if (err) {
 	    return console.log('Error occurred: ' + err);
 		}
 	 
 	//console.log(JSON.parse(data));
 	//console.log(data.tracks.items[0]);
-	for(var i = 0; i < 10; i++){
+		for(var i = 0; i < 10; i++){
 
-	console.log("Artist: " + data.tracks.items[i].artists[0].name);
-	console.log("Song Name: " + data.tracks.items[i].name);
-	console.log("Preview Link: " + data.tracks.items[i].preview_url);
-	console.log("Album Title: " + data.tracks.items[i].album.name);
-	console.log("--------------------------")
+		console.log("Artist: " + data.tracks.items[i].artists[0].name);
+		console.log("Song Name: " + data.tracks.items[i].name);
+		console.log("Preview Link: " + data.tracks.items[i].preview_url);
+		console.log("Album Title: " + data.tracks.items[i].album.name);
+		console.log("--------------------------")
 
-	}
-
-
-	//artist
-	//song name
-	//preview link
-	//album son is in
+		}
 	});
-	// spotify
- //  		.search({ type: 'track', query: song })
- //  		.then(function(response.tracks.items[0]) {
- //    		console.log(response);
- //  		})
- //  		.catch(function(err) {
- //    		console.log(err);
- //  		});
 }
 
 
