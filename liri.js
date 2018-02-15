@@ -9,17 +9,17 @@ var Twitter = require('twitter');
 var request = require('request'); //OMDB
 
 
-//var spotify = new Spotify(keys.spotify);
+var spotify = new Spotify(keys.spotify);
 var client = new Twitter(keys.twitter);
 
 
 switch(process.argv[2]){
 	case "movie-this":
-		default: "Mr. Nobody";
+		//default: "Mr. Nobody";
 		renderMovie();
 		break;
 	case "spotify-this-song":
-		//renderSpotify();
+		renderSpotify();
 		break;
 	case "my-tweets":
 		renderTweets();
@@ -36,9 +36,9 @@ function renderMovie(){
 	//var nobody = process.argv[3];
 
 	for(var i = 3; i < process.argv.length; i++){
-		// if(typeof nobody === 'undefined'){
+		//if(typeof nobody === 'undefined'){
 
-		// 	var movieName = "Mr. Nobody";
+		//var movieName = "Mr. Nobody";
 		if(i > 3 && i < process.argv.length){
 
 			var movieName = movieName + "+" + process.argv[i];
@@ -61,6 +61,7 @@ function renderMovie(){
 			console.log("Language: " + JSON.parse(body).Language);
 			console.log("Plot: " + JSON.parse(body).Plot);
 			console.log("Actors: " + JSON.parse(body).Actors);
+			console.log("-----------------")
 		}
 	});
 };
@@ -75,6 +76,53 @@ function renderTweets(){
 	   };
 	 });
 };
+
+function renderSpotify(){
+	var song = "";
+
+	for(var i = 3; i < process.argv.length; i++){
+		
+		if(i > 3 && i < process.argv.length){
+
+			var song = song + "+" + process.argv[i];
+		}else{
+			var song = process.argv[3];
+		}
+	};
+
+
+	spotify.search({ type: 'track', query: song }, function(err, data) {
+	 	if (err) {
+	    return console.log('Error occurred: ' + err);
+		}
+	 
+	//console.log(JSON.parse(data));
+	//console.log(data.tracks.items[0]);
+	for(var i = 0; i < 10; i++){
+
+	console.log("Artist: " + data.tracks.items[i].artists[0].name);
+	console.log("Song Name: " + data.tracks.items[i].name);
+	console.log("Preview Link: " + data.tracks.items[i].preview_url);
+	console.log("Album Title: " + data.tracks.items[i].album.name);
+	console.log("--------------------------")
+
+	}
+
+
+	//artist
+	//song name
+	//preview link
+	//album son is in
+	});
+	// spotify
+ //  		.search({ type: 'track', query: song })
+ //  		.then(function(response.tracks.items[0]) {
+ //    		console.log(response);
+ //  		})
+ //  		.catch(function(err) {
+ //    		console.log(err);
+ //  		});
+}
 
 
 
